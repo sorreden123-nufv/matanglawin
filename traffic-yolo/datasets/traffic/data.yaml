@@ -1,0 +1,14 @@
+path: datasets/traffic
+
+train: train/images
+val: val/images
+
+nc: 1
+names: ['vehicle']
+
+#roboflow:
+ # workspace: raidens-workspace
+ # project: raidens-workspace
+ # version: dataset
+ # license: Private
+ # url: https://app.roboflow.com/raidens-workspace/raidens-workspace/dataset
