@@ -1,39 +1,38 @@
 import cv2
 from ultralytics import YOLO
 
-model = YOLO("runs/detect/train/weights/best.pt")
-
-cap = cv2.VideoCapture("traffic.mp4")
-
-counted_ids = set()
-vehicle_count = 0
+# Load your model and video
+model = YOLO("runs/detect/train8/weights/best.pt")
+cap = cv2.VideoCapture("../../traffic1.mp4")
 
 while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
+    
+    # Resize for a smaller window
+    frame = cv2.resize(frame, (1280, 720))
+    
+    # Run YOLO prediction on the current frame
+    results = model.predict(frame, verbose=False) # verbose=False stops it from spamming your terminal
 
-    results = model.track(frame, persist=True)
+    # Reset the count to 0 for this frame
+    current_count = 0
 
+    # If YOLO finds any boxes, count how many there are
     if results[0].boxes is not None:
-        boxes = results[0].boxes
+        current_count = len(results[0].boxes)
 
-        for box in boxes:
-            track_id = int(box.id[0]) if box.id is not None else None
+    # Draw the text on the screen showing the current live count
+    cv2.putText(frame, f"Currently on screen: {current_count}", (20, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-            if track_id is not None and track_id not in counted_ids:
-                counted_ids.add(track_id)
-                vehicle_count += 1
-
-    cv2.putText(frame, f"Count: {vehicle_count}", (20, 50),
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
-
+    # Show the video
     cv2.imshow("Traffic", frame)
 
+    # Press 'Esc' to exit
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
 cap.release()
 cv2.destroyAllWindows()
-
-print("Total vehicles:", vehicle_count)
