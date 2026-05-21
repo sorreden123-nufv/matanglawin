@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 # Load trained model
-model = YOLO("runs/detect/train/weights/best.pt")
+model = YOLO("runs/detect/train12/weights/best.pt")
 
 # Run on video
 results = model.predict(

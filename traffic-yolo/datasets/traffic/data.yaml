@@ -1,9 +1,8 @@
-train: ../train/images
-val: ../val/images
-test: ../test/images
+train: train/images
+val: val/images
 
-nc: 4
-names: ['bus', 'car', 'motorcycle', 'truck']
+nc: 5
+names: ['bus', 'car', 'motorcycle', 'truck', 'vehicle']
 
 roboflow:
   workspace: raidens-workspace
